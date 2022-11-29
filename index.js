@@ -16,6 +16,7 @@ async function run() {
     const categoriesCollection = client.db('resaleMarket').collection('categories');
     const productsCollection = client.db('resaleMarket').collection('allProducts');
     const bookingsCollection = client.db('resaleMarket').collection('bookings');
+    const usersCollection = client.db('resaleMarket').collection('users');
 
     try {
         app.get('/categories', async (req, res) => {
@@ -29,6 +30,12 @@ async function run() {
             const query = { categoryId: id };
             const products = await productsCollection.find(query).toArray();
             res.send(products);
+        })
+
+        app.post('/user', async (req, res) => {
+            const user = req.body;
+            const result = await usersCollection.insertOne(user);
+            res.send(result)
         })
 
         app.post('/bookings', async (req, res) => {

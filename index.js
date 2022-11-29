@@ -13,10 +13,17 @@ const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@clu
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
 async function run() {
+    const categoriesCollection = client.db('resaleMarket').collection('categories');
     const productsCollection = client.db('resaleMarket').collection('allProducts');
     const bookingsCollection = client.db('resaleMarket').collection('bookings');
 
     try {
+        app.get('/categories', async (req, res) => {
+            const query = {};
+            const categories = await categoriesCollection.find(query).toArray();
+            res.send(categories);
+        })
+
         app.get('/products/:id', async (req, res) => {
             const id = req.params.id;
             const query = { categoryId: id };

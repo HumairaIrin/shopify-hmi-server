@@ -60,6 +60,13 @@ async function run() {
             res.send(buyers);
         })
 
+        app.get('/users/sellers', async (req, res) => {
+            const type = req.query.type;
+            const query = { accountType: type };
+            const sellers = await usersCollection.find(query).toArray();
+            res.send(sellers);
+        })
+
         app.get('/user/admin/:email', async (req, res) => {
             const email = req.params.email;
             const query = { email };

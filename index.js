@@ -25,6 +25,13 @@ async function run() {
             res.send(categories);
         })
 
+        app.get('/user/buyer/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email };
+            const user = await usersCollection.findOne(query);
+            res.send({ isBuyer: user?.accountType === 'buyer' })
+        })
+
         app.get('/user/seller/:email', async (req, res) => {
             const email = req.params.email;
             const query = { email };
@@ -39,11 +46,25 @@ async function run() {
             res.send(myProducts)
         })
 
-        app.get('/products/:id', async (req, res) => {
-            const id = req.params.id;
-            const query = { categoryId: id };
+        app.get('/products/:categoryName', async (req, res) => {
+            const name = req.params.categoryName;
+            const query = { categoryName: name };
             const products = await productsCollection.find(query).toArray();
             res.send(products);
+        })
+
+        app.get('/users/buyers', async (req, res) => {
+            const type = req.query.type;
+            const query = { accountType: type };
+            const buyers = await usersCollection.find(query).toArray();
+            res.send(buyers);
+        })
+
+        app.get('/user/admin/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email };
+            const user = await usersCollection.findOne(query);
+            res.send({ isAdmin: user?.accountType === 'admin' });
         })
 
         app.post('/user', async (req, res) => {

@@ -25,6 +25,13 @@ async function run() {
             res.send(categories);
         })
 
+        app.get('/myProducts', async (req, res) => {
+            const userEmail = req.query.email;
+            const query = { sellersEmail: userEmail }
+            const myProducts = await productsCollection.find(query).toArray();
+            res.send(myProducts)
+        })
+
         app.get('/products/:id', async (req, res) => {
             const id = req.params.id;
             const query = { categoryId: id };
@@ -44,15 +51,22 @@ async function run() {
                 userName: booking.userName,
                 productName: booking.productName
             };
+
             const alreadyBooked = await bookingsCollection.find(query).toArray();
             if (alreadyBooked.length) {
                 const message = 'You have already booked this product';
-                console.log('already booked')
                 return res.send({ message })
             }
             const result = await bookingsCollection.insertOne(booking);
             res.send(result);
         })
+
+        app.post('/addProduct', async (req, res) => {
+            const product = req.body;
+            const result = await productsCollection.insertOne(product);
+            res.send(result);
+        })
+
     }
     finally { }
 }

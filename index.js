@@ -25,6 +25,13 @@ async function run() {
             res.send(categories);
         })
 
+        app.get('/user/seller/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email };
+            const user = await usersCollection.findOne(query);
+            res.send({ isSeller: user?.accountType === 'seller' })
+        })
+
         app.get('/myProducts', async (req, res) => {
             const userEmail = req.query.email;
             const query = { sellersEmail: userEmail }

@@ -102,6 +102,20 @@ async function run() {
             res.send(result);
         })
 
+        app.put('/user/:email', async (req, res) => {
+            const email = req.params.email;
+            const filter = { email: email };
+            const user = req.body;
+            const option = { upsert: true };
+            const updatedUser = {
+                $set: {
+                    accountStatus: user.accountStatus
+                }
+            }
+            const result = await usersCollection.updateOne(filter, updatedUser, option);
+            res.send(result);
+        })
+
         app.delete('/user/:email', async (req, res) => {
             const email = req.params.email;
             const query = { email };

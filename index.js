@@ -102,6 +102,13 @@ async function run() {
             res.send(result);
         })
 
+        app.delete('/user/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email };
+            const result = await usersCollection.deleteOne(query);
+            res.send(result);
+        })
+
     }
     finally { }
 }
